@@ -1,0 +1,11 @@
+- name: "Clear the /tmp dir on startup: {{ enable_option }}"
+  community.general.sysrc:
+    path: "{{ security_hardening_freebsd_rc_conf_filepath }}"
+    name: "clear_tmp_enable"
+    value: "{{ enable_option }}"
+    state: present
+  vars:
+    enable_option: "{{ 'YES' if security_hardening_clear_tmp_dir_on_boot else 'NO' }}"
+  become: true
+  become_user: root
+

@@ -1,0 +1,3 @@
+- name: "Configure security settings"
+  ansible.builtin.include_tasks: configure/main.yml
+
