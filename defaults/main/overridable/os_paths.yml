@@ -1,3 +1,9 @@
 # config file for host info, network info, and services to start at boot
 security_hardening_freebsd_rc_conf_filepath: "/etc/rc.conf"
 
+# path to sysctl system-tuning config file
+security_hardening_sysctl_conf_path: '/etc/sysctl.conf'
+
+# path to loader.conf bootloader config file
+security_hardening_loader_conf_path: '/boot/loader.conf'
+

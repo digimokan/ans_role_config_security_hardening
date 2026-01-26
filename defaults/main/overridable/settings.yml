@@ -1,3 +1,27 @@
 # clear the /tmp on startup
 security_hardening_clear_tmp_dir_on_boot: true
 
+# close syslogd network socket (used for remote logging)
+security_hardening_close_syslogd_network_socket: true
+
+# processes and sockets only have visibility to their own UIDs
+security_hardening_restrict_process_uid_visbility: true
+
+# processes and sockets only have visibility to their own GIDs
+security_hardening_restrict_process_gid_visbility: true
+
+# processes and sockets only have visibility to their own jails
+security_hardening_restrict_process_jail_visbility: true
+
+# prevent unprivileged users from reading the message buffer (i.e. dmesg)
+security_hardening_restrict_unprivileged_dmesg: true
+
+# prevent unprivileged users from using process debugging (e.g. dtrace)
+security_hardening_restrict_unprivileged_dtrace: true
+
+# randomize allocation of PIDs
+security_hardening_randomize_pid_allocation: true
+
+# prevent dtrace from modifying system state
+security_hardening_restrict_dtrace_system_mod: true
+

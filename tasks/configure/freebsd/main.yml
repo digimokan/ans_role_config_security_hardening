@@ -1,11 +1,45 @@
-- name: "Clear the /tmp dir on startup: {{ enable_option }}"
+- name: "Set all security hardening options in '{{ security_hardening_freebsd_rc_conf_filepath }}'"
   community.general.sysrc:
     path: "{{ security_hardening_freebsd_rc_conf_filepath }}"
-    name: "clear_tmp_enable"
-    value: "{{ enable_option }}"
+    name: "{{ setting.nm }}"
+    value: "{{ setting.val }}"
     state: present
-  vars:
-    enable_option: "{{ 'YES' if security_hardening_clear_tmp_dir_on_boot else 'NO' }}"
+  loop:
+    - { nm: "clear_tmp_enable", val: "{{ 'YES' if security_hardening_clear_tmp_dir_on_boot else 'NO' }}" }
+    - { nm: "syslogd_flags", val: "{{ '-ss' if security_hardening_close_syslogd_network_socket else '' }}" }
+  loop_control:
+    loop_var: setting
+  become: true
+  become_user: root
+
+- name: "Set all security hardening options in '{{ security_hardening_sysctl_conf_path }}'"
+  ansible.posix.sysctl:
+    sysctl_file: "{{ security_hardening_sysctl_conf_path }}"
+    name: "{{ setting.nm }}"
+    value: "{{ setting.val }}"
+    state: present
+  loop:
+    - { nm: "security.bsd.see_other_uids", val: "{{ '0' if security_hardening_restrict_process_uid_visbility else '1' }}" }
+    - { nm: "security.bsd.see_other_gids", val: "{{ '0' if security_hardening_restrict_process_gid_visbility else '1' }}" }
+    - { nm: "security.bsd.see_jail_proc", val: "{{ '0' if security_hardening_restrict_process_jail_visbility else '1' }}" }
+    - { nm: "security.bsd.unprivileged_read_msgbuf", val: "{{ '0' if security_hardening_restrict_unprivileged_dmesg else '1' }}" }
+    - { nm: "security.bsd.unprivileged_proc_debug", val: "{{ '0' if security_hardening_restrict_unprivileged_dtrace else '1' }}" }
+    - { nm: "kern.randompid", val: "{{ '1' if security_hardening_randomize_pid_allocation else '0' }}" }
+  loop_control:
+    loop_var: setting
+  become: true
+  become_user: root
+
+- name: "Set all security hardening options in '{{ security_hardening_loader_conf_path }}'"
+  ansible.builtin.lineinfile:
+    path: "{{ security_hardening_loader_conf_path }}"
+    regexp: "^{{ setting.nm }}="
+    line: "{{ setting.nm }}={{ setting.val }}"
+    state: present
+  loop:
+    - { nm: "security.bsd.allow_destructive_dtrace", val: "{{ '0' if security_hardening_restrict_dtrace_system_mod else '1' }}" }
+  loop_control:
+    loop_var: setting
   become: true
   become_user: root
 
