@@ -14,10 +14,10 @@ security_hardening_restrict_process_gid_visbility: true
 security_hardening_restrict_process_jail_visbility: true
 
 # prevent unprivileged users from reading the message buffer (i.e. dmesg)
-security_hardening_restrict_unprivileged_dmesg: true
+security_hardening_restrict_unpriv_dmesg: true
 
 # prevent unprivileged users from using process debugging (e.g. dtrace)
-security_hardening_restrict_unprivileged_dtrace: true
+security_hardening_restrict_unpriv_dtrace: true
 
 # randomize allocation of PIDs
 security_hardening_randomize_pid_allocation: true
