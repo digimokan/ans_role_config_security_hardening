@@ -1,0 +1,31 @@
+- name: "Set all idempotent security hardening options in '{{ security_hardening_sysctl_conf_path }}'"
+  ansible.posix.sysctl:
+    sysctl_file: "{{ security_hardening_sysctl_conf_path }}"
+    name: "{{ setting.nm }}"
+    value: "{{ setting.val }}"
+    state: "{{ 'absent' if setting.val is none else 'present' }}"
+  loop:
+    - { nm: "security.bsd.see_other_uids", val: "{{ '0' if security_hardening_restrict_process_uid_visbility else null }}" }
+    - { nm: "security.bsd.see_other_gids", val: "{{ '0' if security_hardening_restrict_process_gid_visbility else null }}" }
+    - { nm: "security.bsd.see_jail_proc", val: "{{ '0' if security_hardening_restrict_process_jail_visbility else null }}" }
+    - { nm: "security.bsd.unprivileged_read_msgbuf", val: "{{ '0' if security_hardening_restrict_unpriv_dmesg else null }}" }
+    - { nm: "security.bsd.unprivileged_proc_debug", val: "{{ '0' if security_hardening_restrict_unpriv_dtrace else null }}" }
+  loop_control:
+    loop_var: setting
+  become: true
+  become_user: root
+
+- name: "Set all 'activating' security hardening options in '{{ security_hardening_sysctl_conf_path }}'"
+  ansible.posix.sysctl:
+    sysctl_file: "{{ security_hardening_sysctl_conf_path }}"
+    name: "{{ setting.nm }}"
+    value: "{{ setting.val }}"
+    state: "{{ 'absent' if setting.val is none else 'present' }}"
+  loop:
+    - { nm: "kern.randompid", val: "{{ '1' if security_hardening_randomize_pid_allocation else null }}" }
+  loop_control:
+    loop_var: setting
+  changed_when: false
+  become: true
+  become_user: root
+

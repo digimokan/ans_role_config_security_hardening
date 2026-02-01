@@ -1,0 +1,13 @@
+- name: "Set all security hardening options in '{{ security_hardening_loader_conf_path }}'"
+  ansible.builtin.lineinfile:
+    path: "{{ security_hardening_loader_conf_path }}"
+    regexp: "^{{ setting.nm }}="
+    line: "{{ setting.nm }}={{ setting.val }}"
+    state: "{{ 'absent' if setting.val is none else 'present' }}"
+  loop:
+    - { nm: "security.bsd.allow_destructive_dtrace", val: "{{ '0' if security_hardening_restrict_dtrace_system_mod else null }}" }
+  loop_control:
+    loop_var: setting
+  become: true
+  become_user: root
+

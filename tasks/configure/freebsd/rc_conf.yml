@@ -1,0 +1,14 @@
+- name: "Set all security hardening options in '{{ security_hardening_freebsd_rc_conf_filepath }}'"
+  community.general.sysrc:
+    path: "{{ security_hardening_freebsd_rc_conf_filepath }}"
+    name: "{{ setting.nm }}"
+    value: "{{ setting.val }}"
+    state: "{{ 'absent' if setting.val is none else 'present' }}"
+  loop:
+    - { nm: "clear_tmp_enable", val: "{{ 'YES' if security_hardening_clear_tmp_dir_on_boot else null }}" }
+    - { nm: "syslogd_flags", val: "{{ '-ss' if security_hardening_close_syslogd_network_socket else null }}" }
+  loop_control:
+    loop_var: setting
+  become: true
+  become_user: root
+
