@@ -16,6 +16,7 @@
   ansible.posix.sysctl:
     sysctl_file: "{{ security_hardening_sysctl_conf_path }}"
     name: "{{ setting.nm }}"
+    value: "{{ setting.val }}"
     state: "{{ 'absent' if setting.val is none else 'present' }}"
   loop:
     - { nm: "security.bsd.see_other_uids", val: "{{ '0' if security_hardening_restrict_process_uid_visbility else null }}" }
