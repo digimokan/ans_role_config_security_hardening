@@ -7,7 +7,8 @@
     # state: "{{ 'absent' if setting.val is none else 'present' }}"
     state: "{{ (setting.val is not none) | ternary('present', 'absent') }}"
   loop:
-    - { nm: "security.bsd.see_other_uids", val: "{{ '0' if security_hardening_restrict_process_uid_visbility else null }}" }
+    # - { nm: "security.bsd.see_other_uids", val: "{{ '0' if security_hardening_restrict_process_uid_visbility else null }}" }
+    - { nm: "security.bsd.see_other_uids", val: "{{ '0' if security_hardening_restrict_process_uid_visbility | bool else None }}" }
     - { nm: "security.bsd.see_other_gids", val: "{{ '0' if security_hardening_restrict_process_gid_visbility else null }}" }
     - { nm: "security.bsd.see_jail_proc", val: "{{ '0' if security_hardening_restrict_process_jail_visbility else null }}" }
     - { nm: "security.bsd.unprivileged_read_msgbuf", val: "{{ '0' if security_hardening_restrict_unpriv_dmesg else null }}" }
