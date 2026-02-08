@@ -9,6 +9,12 @@
     - { nm: "syslogd_flags", val: "{{ '-ss' if security_hardening_close_syslogd_network_socket else null }}" }
   loop_control:
     loop_var: setting
+  register: loop_results
   become: true
   become_user: root
+
+- name: "'{{ security_hardening_freebsd_rc_conf_filepath }}' changed, so set 'security_hardening_requests_reboot' to 'true'"
+  ansible.builtin.set_fact:
+    security_hardening_requests_reboot: true
+  when: "{{ loop_results.results | any(attribute='changed') }}"
 

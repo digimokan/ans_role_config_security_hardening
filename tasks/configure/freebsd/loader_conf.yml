@@ -8,6 +8,12 @@
     - { nm: "security.bsd.allow_destructive_dtrace", val: "{{ '0' if security_hardening_restrict_dtrace_system_mod else null }}" }
   loop_control:
     loop_var: setting
+  register: loop_results
   become: true
   become_user: root
+
+- name: "'{{ security_hardening_loader_conf_path }}' changed, so set 'security_hardening_requests_reboot' to 'true'"
+  ansible.builtin.set_fact:
+    security_hardening_requests_reboot: true
+  when: "{{ loop_results.results | any(attribute='changed') }}"
 

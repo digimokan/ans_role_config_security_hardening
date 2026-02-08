@@ -51,6 +51,7 @@ Configure OS security hardening options.
        - name: "Configure OS security hardening options"
          ansible.builtin.include_role:
            name: ans_role_config_security_hardening
+           public: true
    ```
 
 ## Role Options
@@ -58,6 +59,10 @@ Configure OS security hardening options.
 Vars with default values, which can be overridden in the playbook:
 
   * [overridable](../defaults/main/overridable)
+
+Vars defined by this role, exported with `public: true`, for use in other roles:
+
+  * [export](../defaults/main/export/main.yml)
 
 ## Contributing
 
