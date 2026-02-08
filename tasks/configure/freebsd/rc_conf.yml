@@ -3,10 +3,12 @@
     path: "{{ security_hardening_freebsd_rc_conf_filepath }}"
     name: "{{ setting.nm }}"
     value: "{{ setting.val }}"
-    state: "{{ 'absent' if setting.val is none else 'present' }}"
+    state: "{{ 'present' if setting.st else 'absent' }}"
   loop:
-    - { nm: "clear_tmp_enable", val: "{{ 'YES' if security_hardening_clear_tmp_dir_on_boot else null }}" }
-    - { nm: "syslogd_flags", val: "{{ '-ss' if security_hardening_close_syslogd_network_socket else null }}" }
+    - { nm: "clear_tmp_enable", st: "{{ security_hardening_clear_tmp_dir_on_boot }}",
+        val: "{{ 'YES' if security_hardening_clear_tmp_dir_on_boot else 'NO' }}" }
+    - { nm: "syslogd_flags", st: "{{ security_hardening_close_syslogd_network_socket }}",
+        val: "{{ '-ss' if security_hardening_close_syslogd_network_socket else '' }}" }
   loop_control:
     loop_var: setting
   register: loop_results

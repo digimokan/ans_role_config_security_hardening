@@ -3,9 +3,10 @@
     path: "{{ security_hardening_loader_conf_path }}"
     regexp: "^{{ setting.nm }}="
     line: "{{ setting.nm }}={{ setting.val }}"
-    state: "{{ 'absent' if setting.val is none else 'present' }}"
+    state: "{{ 'present' if setting.st else 'absent' }}"
   loop:
-    - { nm: "security.bsd.allow_destructive_dtrace", val: "{{ '0' if security_hardening_restrict_dtrace_system_mod else null }}" }
+    - { nm: "security.bsd.allow_destructive_dtrace", st: "{{ security_hardening_restrict_dtrace_system_mod }}",
+        val: "{{ '0' if security_hardening_restrict_dtrace_system_mod else '1' }}" }
   loop_control:
     loop_var: setting
   register: loop_results

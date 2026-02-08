@@ -31,9 +31,10 @@
     sysctl_file: "{{ security_hardening_sysctl_conf_path }}"
     name: "{{ setting.nm }}"
     value: "{{ setting.val }}"
-    state: "{{ 'absent' if setting.val is none else 'present' }}"
+    state: "{{ 'present' if setting.st else 'absent' }}"
   loop:
-    - { nm: "kern.randompid", val: "{{ '1' if security_hardening_randomize_pid_allocation else null }}" }
+    - { nm: "kern.randompid", st: "{{ security_hardening_randomize_pid_allocation }}",
+        val: "{{ '1' if security_hardening_randomize_pid_allocation else '0' }}" }
   loop_control:
     loop_var: setting
   changed_when: false
