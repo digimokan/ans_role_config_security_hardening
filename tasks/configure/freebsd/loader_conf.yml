@@ -15,5 +15,5 @@
 - name: "'{{ security_hardening_loader_conf_path }}' changed, so set 'security_hardening_requests_reboot' to 'true'"
   ansible.builtin.set_fact:
     security_hardening_requests_reboot: true
-  when: loop_results.results | any(attribute='changed')
+  when: loop_results.changed
 
