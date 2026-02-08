@@ -3,9 +3,11 @@
     sysctl_file: "{{ security_hardening_sysctl_conf_path }}"
     name: "{{ setting.nm }}"
     # value: "{{ setting.val }}"
-    value: "{{ (setting.val is not none) | ternary(setting.val, omit) }}"
+    # value: "{{ (setting.val is not none) | ternary(setting.val, omit) }}"
+    value: "{{ setting.val if setting.val is not none else omit }}"
     # state: "{{ 'absent' if setting.val is none else 'present' }}"
-    state: "{{ (setting.val is not none) | ternary('present', 'absent') }}"
+    # state: "{{ (setting.val is not none) | ternary('present', 'absent') }}"
+    state: "{{ 'present' if setting.val is not none else 'absent' }}"
   loop:
     # - { nm: "security.bsd.see_other_uids", val: "{{ '0' if security_hardening_restrict_process_uid_visbility else null }}" }
     - { nm: "security.bsd.see_other_uids", val: "{{ '0' if security_hardening_restrict_process_uid_visbility | bool else None }}" }
