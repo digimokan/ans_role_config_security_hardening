@@ -4,7 +4,7 @@
     name: "{{ setting.nm }}"
     # value: "{{ setting.val }}"
     # value: "{{ (setting.val is not none) | ternary(setting.val, omit) }}"
-    value: "{{ setting.val if setting.val is not none else omit }}"
+    value: "{{ setting.val if setting.val is not none else 'dontcare' }}"
     # state: "{{ 'absent' if setting.val is none else 'present' }}"
     # state: "{{ (setting.val is not none) | ternary('present', 'absent') }}"
     state: "{{ 'present' if setting.val is not none else 'absent' }}"
