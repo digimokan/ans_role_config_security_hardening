@@ -16,5 +16,5 @@
 - name: "'{{ security_hardening_freebsd_rc_conf_filepath }}' changed, so set 'security_hardening_requests_reboot' to 'true'"
   ansible.builtin.set_fact:
     security_hardening_requests_reboot: true
-  when: "{{ loop_results.results | any(attribute='changed') }}"
+  when: loop_results.results | any(attribute='changed')
 
