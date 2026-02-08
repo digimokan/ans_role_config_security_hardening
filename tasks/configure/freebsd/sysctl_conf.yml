@@ -2,19 +2,19 @@
   ansible.posix.sysctl:
     sysctl_file: "{{ security_hardening_sysctl_conf_path }}"
     name: "{{ setting.nm }}"
-    # value: "{{ setting.val }}"
-    # value: "{{ (setting.val is not none) | ternary(setting.val, omit) }}"
-    value: "{{ setting.val if setting.val is not none else 'dontcare' }}"
-    # state: "{{ 'absent' if setting.val is none else 'present' }}"
-    # state: "{{ (setting.val is not none) | ternary('present', 'absent') }}"
-    state: "{{ 'present' if setting.val is not none else 'absent' }}"
+    value: "{{ setting.val }}"
+    state: "{{ 'present' if setting.st else 'absent' }}"
   loop:
-    # - { nm: "security.bsd.see_other_uids", val: "{{ '0' if security_hardening_restrict_process_uid_visbility else null }}" }
-    - { nm: "security.bsd.see_other_uids", val: "{{ '0' if security_hardening_restrict_process_uid_visbility | bool else None }}" }
-    - { nm: "security.bsd.see_other_gids", val: "{{ '0' if security_hardening_restrict_process_gid_visbility else null }}" }
-    - { nm: "security.bsd.see_jail_proc", val: "{{ '0' if security_hardening_restrict_process_jail_visbility else null }}" }
-    - { nm: "security.bsd.unprivileged_read_msgbuf", val: "{{ '0' if security_hardening_restrict_unpriv_dmesg else null }}" }
-    - { nm: "security.bsd.unprivileged_proc_debug", val: "{{ '0' if security_hardening_restrict_unpriv_dtrace else null }}" }
+    - { nm: "security.bsd.see_other_uids", st: "{{ security_hardening_restrict_process_uid_visbility }}",
+        val: "{{ '0' if security_hardening_restrict_process_uid_visbility else '1' }}" }
+    - { nm: "security.bsd.see_other_gids", st: "{{ security_hardening_restrict_process_gid_visbility }}",
+        val: "{{ '0' if security_hardening_restrict_process_gid_visbility else '1' }}" }
+    - { nm: "security.bsd.see_jail_proc", st: "{{ security_hardening_restrict_process_jail_visbility }}",
+        val: "{{ '0' if security_hardening_restrict_process_jail_visbility else '1' }}" }
+    - { nm: "security.bsd.unprivileged_read_msgbuf", st: "{{ security_hardening_restrict_unpriv_dmesg }}",
+        val: "{{ '0' if security_hardening_restrict_unpriv_dmesg else '1' }}" }
+    - { nm: "security.bsd.unprivileged_proc_debug", st: "{{ security_hardening_restrict_unpriv_dtrace }}",
+        val: "{{ '0' if security_hardening_restrict_unpriv_dtrace else '1' }}" }
   loop_control:
     loop_var: setting
   register: loop_results
